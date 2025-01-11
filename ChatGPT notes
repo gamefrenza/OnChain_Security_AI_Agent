@@ -1,0 +1,263 @@
+### **Guidance for Building an Onchain Security Monitoring AI Agent**
+
+An AI agent that monitors onchain security risks can proactively identify vulnerabilities, flag suspicious transactions, and enhance the security of blockchain ecosystems. Below is a step-by-step guide to building such a system:
+
+---
+
+### **1. Core Features of the Security AI Agent**
+1. **Threat Detection**  
+   - Monitor onchain activities for suspicious patterns (e.g., flash loan attacks, rug pulls, large token transfers).
+   - Use anomaly detection algorithms to flag unusual behavior.  
+2. **Smart Contract Vulnerability Analysis**  
+   - Analyze deployed smart contracts for common vulnerabilities like reentrancy, integer overflow, and unchecked calls.  
+3. **Risk Scoring**  
+   - Assign risk scores to addresses, transactions, or contracts based on predefined metrics (e.g., frequency of interactions, token flow anomalies).
+4. **Real-Time Alerts**  
+   - Notify users or projects about risks via onchain messages or offchain notifications (e.g., email, Discord, Telegram).
+5. **Onchain Forensics**  
+   - Trace fund movements in potential exploit cases to track stolen assets.  
+6. **Decentralized Security Governance**  
+   - Allow community participation in refining the AI's detection models via a DAO.
+
+---
+
+### **2. High-Level Architecture**
+#### **Frontend**
+- **Framework:** Use React (or React Native for mobile).  
+- **Features:**  
+  - Dashboard to display flagged risks, risk scores, and transaction details.  
+  - Wallet integration for users to monitor specific addresses or contracts.
+
+#### **Backend**
+- **Node.js + TypeScript**  
+  - Fetch and process blockchain data.  
+  - Host APIs to expose security insights to the frontend.  
+- **GraphQL APIs:** Use tools like **The Graph** to fetch real-time blockchain events.
+
+#### **Blockchain Interaction**
+- **Libraries:** Ethers.js or web3.js to interact with the blockchain.  
+- **Smart Contracts:** Deploy a contract for onchain alerts and DAO-based governance.
+
+#### **AI Model**
+- **Algorithms:**  
+  - Supervised learning for detecting known threats.  
+  - Unsupervised learning (e.g., clustering) for detecting anomalies.  
+- **Tech Stack:** Use Python with TensorFlow or PyTorch.  
+- **Data Sources:**  
+  - Onchain data (e.g., transaction history, smart contract state).  
+  - Offchain feeds (e.g., Chainlink for additional threat intelligence).
+
+#### **Database**
+- **Storage for Analysis:** Use MongoDB or PostgreSQL for historical transaction data.  
+- **Decentralized Options:** Store critical risk data on IPFS or Arweave for immutability.
+
+#### **Security-Oriented Analytics**
+- **Onchain Behavior Patterns:** Analyze token flow, transaction frequency, and contract interaction sequences.  
+- **Historical Data Analysis:** Compare current behaviors with historical patterns to detect anomalies.
+
+---
+
+### **3. Development Workflow**
+
+#### **Step 1: Data Collection**  
+- **Setup an Ethereum node (e.g., Infura, Alchemy, or self-hosted Geth) to access onchain data.**  
+- Use GraphQL or JSON-RPC APIs to fetch:  
+  - Recent blocks and transactions.  
+  - Contract creation events and interactions.  
+  - Token transfer logs (e.g., ERC-20 or ERC-721).  
+
+#### **Step 2: AI Model Development**  
+1. **Data Preprocessing:**  
+   - Extract relevant features like transaction size, token type, gas usage, and timestamps.  
+   - Normalize and encode data for AI algorithms.  
+
+2. **Algorithm Selection:**  
+   - **Anomaly Detection:** Isolation Forest or DBSCAN to detect unusual transactions.  
+   - **Classification Models:** Random Forest or XGBoost for predicting malicious activity.  
+
+3. **Training the Model:**  
+   - Train models on historical exploit datasets (e.g., MEV exploits, reentrancy attacks).  
+   - Use labeled datasets from blockchain security repositories (e.g., Ethernaut challenges).  
+
+4. **Testing and Deployment:**  
+   - Test the model on live data streams from testnets (e.g., Goerli or Sepolia).  
+   - Deploy models using TensorFlow Serving or PyTorch Serve.  
+
+---
+
+#### **Step 3: Smart Contract Deployment**
+- **Purpose:** Enable onchain logging of security alerts or risk scores.  
+- **Contract Features:**  
+  - Function to log flagged transactions.  
+  - Role-based access control for submitting AI-detected alerts.  
+
+Example:  
+```solidity
+pragma solidity ^0.8.0;
+
+contract SecurityAlerts {
+    struct Alert {
+        address reporter;
+        string message;
+        uint256 timestamp;
+    }
+
+    Alert[] public alerts;
+
+    function logAlert(string memory _message) public {
+        alerts.push(Alert(msg.sender, _message, block.timestamp));
+    }
+
+    function getAlerts() public view returns (Alert[] memory) {
+        return alerts;
+    }
+}
+```
+
+---
+
+#### **Step 4: Frontend Development**
+1. **Dashboard Features:**  
+   - Display flagged transactions with details (e.g., transaction hash, risk score).  
+   - Interactive graphs for historical trends.  
+
+2. **React Components:**  
+   - `TransactionList`: Displays flagged transactions.  
+   - `RiskChart`: Visualizes risk scores over time.  
+
+3. **Wallet Integration:**  
+   - Use `ethers.js` to connect wallets and fetch user-specific risks.  
+
+---
+
+#### **Step 5: Notifications and Governance**
+1. **Notifications:**  
+   - Integrate offchain alerts using Twilio, Telegram bots, or Discord webhooks.  
+2. **Governance:**  
+   - Deploy a DAO contract where users vote to adjust the AI agent's behavior or add/remove flagged risks.
+
+---
+
+### **4. Enhancements**
+1. **Multi-Chain Support:** Extend to monitor multiple chains (e.g., BNB Chain, Polygon).  
+2. **AI Model Refinement:** Use federated learning to incorporate community feedback into the AI.  
+3. **Tokenization:** Launch a native token to incentivize users for reporting and validating risks.  
+
+---
+
+### Prompts for Implementing an Onchain Security AI Agent in Cursor IDE  
+
+These prompts will guide the AI capabilities of Cursor IDE to assist in developing various components of the onchain security AI agent, step by step.
+
+---
+
+### **1. Setting Up the Project**
+**Prompt:**  
+*"Create a new project for an onchain security AI agent. Initialize the project with a React frontend and a Node.js backend. Set up TypeScript for type safety and Ethers.js for blockchain interaction. Use MongoDB for the database."*
+
+---
+
+### **2. Fetching Blockchain Data**
+**Prompt:**  
+*"Generate a Node.js script to fetch recent Ethereum blocks and transactions using Alchemy's JSON-RPC API. Include methods to decode logs for ERC-20 token transfers and contract interactions."*
+
+---
+
+### **3. Data Preprocessing for AI Model**
+**Prompt:**  
+*"Create a Python script that preprocesses Ethereum transaction data for an AI model. Include features like gas used, transaction size, timestamps, and token flow. Ensure the script outputs a normalized dataset in CSV format."*
+
+---
+
+### **4. Building the AI Model**
+**Prompt:**  
+*"Develop an anomaly detection AI model using Python and TensorFlow. Use Isolation Forest to detect unusual transaction patterns. Include training and testing scripts that accept the preprocessed Ethereum transaction dataset."*
+
+---
+
+### **5. Integrating AI Model with Backend**
+**Prompt:**  
+*"Write an API endpoint in Node.js that uses TensorFlow.js to run the trained AI model. The endpoint should accept transaction data, run anomaly detection, and return a risk score."*
+
+---
+
+### **6. Creating a Smart Contract for Security Alerts**
+**Prompt:**  
+*"Write a Solidity smart contract named `SecurityAlerts`. It should:  
+1. Allow anyone to log flagged transactions with a message.  
+2. Store alerts in an array and emit events for new alerts.  
+3. Include a getter function to retrieve all logged alerts."*
+
+---
+
+### **7. Connecting the Frontend with Smart Contract**
+**Prompt:**  
+*"Develop a React component that:  
+1. Connects to a MetaMask wallet using Ethers.js.  
+2. Interacts with the `SecurityAlerts` contract to fetch and display logged alerts.  
+3. Provides a form to log new alerts by interacting with the contract."*
+
+---
+
+### **8. Building the Dashboard**
+**Prompt:**  
+*"Create a React dashboard with the following features:  
+1. A table to display flagged transactions with details like risk scores and transaction hashes.  
+2. A graph showing risk trends over time using Chart.js.  
+3. Filters to search for specific transactions by address or date."*
+
+---
+
+### **9. Notification System**
+**Prompt:**  
+*"Integrate a notification system using Node.js that sends Telegram alerts when high-risk transactions are detected. Include configuration for Telegram Bot API and a subscription management system."*
+
+---
+
+### **10. DAO Governance**
+**Prompt:**  
+*"Create a Solidity DAO contract that:  
+1. Allows members to vote on updates to the AI agent's detection thresholds.  
+2. Requires quorum and majority voting to approve changes.  
+3. Tracks proposals and voting results onchain."*
+
+---
+
+### **11. Testing and Deployment**
+#### Smart Contracts  
+**Prompt:**  
+*"Write unit tests for the `SecurityAlerts` and DAO smart contracts using Hardhat and Chai. Include test cases for logging alerts, retrieving alerts, and voting on proposals."*
+
+#### Frontend & Backend  
+**Prompt:**  
+*"Generate integration tests for the backend API and React frontend using Jest. Test the API's ability to process transaction data and return risk scores, and ensure the frontend displays accurate results."*
+
+---
+
+### **12. Deploying to Mainnet/Testnet**
+**Prompt:**  
+*"Write a Hardhat deployment script for the `SecurityAlerts` and DAO contracts. Include configurations for deploying to Goerli and Ethereum Mainnet."*
+
+---
+
+### **13. Multi-Chain Support**
+**Prompt:**  
+*"Modify the backend to support Polygon and BNB Chain in addition to Ethereum. Add a chain selector to the frontend to toggle between networks."*
+
+---
+
+### **14. Token Incentive System**
+**Prompt:**  
+*"Add a new feature to the DAO contract that:  
+1. Issues native tokens as rewards for users who report validated security risks.  
+2. Tracks token balances and allows users to redeem tokens for services."*
+
+---
+
+### **15. Documentation**
+**Prompt:**  
+*"Generate a README file for the onchain security AI agent project. Include:  
+1. Project description.  
+2. Installation instructions.  
+3. Usage guide for the frontend, backend, and smart contracts."*
+
